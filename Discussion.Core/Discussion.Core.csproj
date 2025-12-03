@@ -12,7 +12,6 @@
       <Folder Include="Database\Entities\Base\" />
       <Folder Include="Database\Extensions\" />
       <Folder Include="Infrastructure\Enums\" />
-      <Folder Include="Infrastructure\Hubs\" />
       <Folder Include="Infrastructure\Processing\RabbitMq\" />
     </ItemGroup>
 

@@ -1,5 +1,6 @@
 namespace Discussion.Web;
 
+using Core.Infrastructure.Hubs;
 using Extensions;
 
 public class Program
@@ -26,6 +27,8 @@ public class Program
         app.UseConfiguredSwagger();
         
         app.MapControllers();
+        
+        app.MapHub<CommentsHub>("/comments");
         
         await app.ExecuteStartupActions();
         await app.RunAsync();

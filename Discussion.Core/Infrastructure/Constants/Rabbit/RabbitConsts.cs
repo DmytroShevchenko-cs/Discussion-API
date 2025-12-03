@@ -1,6 +1,6 @@
 namespace Discussion.Core.Infrastructure.Constants.Rabbit;
 
-public static class RabbitConsts
+public class RabbitConsts
 {
     public static class MessageQueue
     {
