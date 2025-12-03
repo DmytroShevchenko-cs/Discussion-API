@@ -1,0 +1,11 @@
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+
+/**/obj/BuildHost-netcore/
+/**/obj/BuildHost-net472/
+
+.idea/
+*.sln.iml
