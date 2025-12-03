@@ -4,22 +4,21 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <EnablePreviewFeatures>true</EnablePreviewFeatures>
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Commands\" />
       <Folder Include="Database\Entities\Base\" />
       <Folder Include="Database\Extensions\" />
-      <Folder Include="DTO\" />
       <Folder Include="Infrastructure\Enums\" />
       <Folder Include="Infrastructure\Hubs\" />
       <Folder Include="Infrastructure\Processing\RabbitMq\" />
-      <Folder Include="Queries\" />
-      <Folder Include="Services\" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="MediatR" Version="14.0.0-beta-1" />
+        <PackageReference Include="FluentValidation" Version="12.1.0" />
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.1" />
+        <PackageReference Include="MediatR" Version="13.1.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.0">
@@ -30,6 +29,7 @@
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.0" />
         <PackageReference Include="NodaTime" Version="3.2.2" />
         <PackageReference Include="MassTransit.Abstractions" Version="8.2.4" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="10.0.1" />
     </ItemGroup>
 
 </Project>

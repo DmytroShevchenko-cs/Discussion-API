@@ -6,6 +6,8 @@ using User;
 public class Comment : BaseEntity
 {
     public string Text { get; set; } = null!;
+    
+    public bool IsDeleted { get; set; }
 
     public int? HeadCommentId { get; set; }
     public Comment? HeadComment { get; set; }

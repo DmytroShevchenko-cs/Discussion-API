@@ -5,6 +5,7 @@ using Core.Database;
 using Core.Infrastructure.Constants.Rabbit;
 using Core.Infrastructure.Managers.RabbitConsumer;
 using Core.Infrastructure.Managers.RabbitProducer;
+using Core.Services.CommentService;
 using MassTransit;
 using Microsoft.Extensions.Options;
 
@@ -16,6 +17,8 @@ public static class CustomServiceExtensions
         {
             options.RegisterServicesFromAssembly(typeof(BaseDbContext).Assembly);
         });
+
+        services.AddTransient<ICommentService, CommentService>();
         
         return services;
     }

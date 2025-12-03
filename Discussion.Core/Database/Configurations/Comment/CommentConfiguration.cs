@@ -15,5 +15,11 @@ public class CommentConfiguration : IEntityTypeConfiguration<Comment>
         builder.HasMany(r => r.Images)
             .WithOne(r => r.Comment)
             .HasForeignKey(r => r.CommentId);
+        
+        builder.Property(r => r.Text)
+            .HasMaxLength(2000);
+        
+        builder.Property(r => r.IsDeleted)
+            .HasDefaultValue(false);
     }
 }

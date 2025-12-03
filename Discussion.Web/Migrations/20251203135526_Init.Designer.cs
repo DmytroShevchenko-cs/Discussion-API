@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Discussion.Web.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    [Migration("20251203121710_Init")]
+    [Migration("20251203135526_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -42,9 +42,16 @@ namespace Discussion.Web.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("head_comment_id");
 
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_deleted");
+
                     b.Property<string>("Text")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
                         .HasColumnName("text");
 
                     b.Property<int>("UserId")
@@ -187,6 +194,12 @@ namespace Discussion.Web.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
                         .HasColumnName("email");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("is_deleted");
 
                     b.Property<string>("UserName")
                         .IsRequired()

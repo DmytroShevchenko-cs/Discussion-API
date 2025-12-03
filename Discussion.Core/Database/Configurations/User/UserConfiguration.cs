@@ -19,5 +19,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasMaxLength(256);
 
         builder.HasIndex(r => r.Email).IsUnique();
+
+        builder.Property(r => r.IsDeleted)
+            .HasDefaultValue(false);
     }
 }

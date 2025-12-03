@@ -36,7 +36,8 @@ namespace Discussion.Web.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     user_name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false)
+                    email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: false),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -49,7 +50,8 @@ namespace Discussion.Web.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    text = table.Column<string>(type: "text", nullable: false),
+                    text = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                     head_comment_id = table.Column<int>(type: "integer", nullable: true),
                     user_id = table.Column<int>(type: "integer", nullable: false),
                     created_at = table.Column<Instant>(type: "timestamp with time zone", nullable: false)
