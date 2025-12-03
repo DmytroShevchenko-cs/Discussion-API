@@ -192,17 +192,17 @@ namespace Discussion.Web.Migrations
                         .HasColumnName("user_name");
 
                     b.HasKey("Id")
-                        .HasName("pk_user");
+                        .HasName("pk_users");
 
                     b.HasIndex("Email")
                         .IsUnique()
-                        .HasDatabaseName("ix_user_email");
+                        .HasDatabaseName("ix_users_email");
 
                     b.HasIndex("UserName")
                         .IsUnique()
-                        .HasDatabaseName("ix_user_user_name");
+                        .HasDatabaseName("ix_users_user_name");
 
-                    b.ToTable("user");
+                    b.ToTable("users");
                 });
 
             modelBuilder.Entity("Discussion.Core.Database.Entities.Comment.Comment", b =>
@@ -217,7 +217,7 @@ namespace Discussion.Web.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_comments_user_user_id");
+                        .HasConstraintName("fk_comments_users_user_id");
 
                     b.Navigation("HeadComment");
 

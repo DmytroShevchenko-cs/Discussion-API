@@ -2,6 +2,7 @@ namespace Discussion.Core.Database;
 
 using Entities.Comment;
 using Entities.Storage;
+using Entities.User;
 using Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,7 @@ public class BaseDbContext(DbContextOptions<BaseDbContext> options) : DbContext(
     public DbSet<StorageItem> StorageItems { get; set; }
     public DbSet<CommentFile> CommentFiles { get; set; }
     public DbSet<CommentImage> CommentImages { get; set; }
+    public DbSet<User> Users { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

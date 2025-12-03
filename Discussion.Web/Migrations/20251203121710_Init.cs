@@ -30,7 +30,7 @@ namespace Discussion.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "user",
+                name: "users",
                 columns: table => new
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
@@ -40,7 +40,7 @@ namespace Discussion.Web.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_user", x => x.id);
+                    table.PrimaryKey("pk_users", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -63,9 +63,9 @@ namespace Discussion.Web.Migrations
                         principalTable: "comments",
                         principalColumn: "id");
                     table.ForeignKey(
-                        name: "fk_comments_user_user_id",
+                        name: "fk_comments_users_user_id",
                         column: x => x.user_id,
-                        principalTable: "user",
+                        principalTable: "users",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -161,14 +161,14 @@ namespace Discussion.Web.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "ix_user_email",
-                table: "user",
+                name: "ix_users_email",
+                table: "users",
                 column: "email",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "ix_user_user_name",
-                table: "user",
+                name: "ix_users_user_name",
+                table: "users",
                 column: "user_name",
                 unique: true);
         }
@@ -189,7 +189,7 @@ namespace Discussion.Web.Migrations
                 name: "storage_items");
 
             migrationBuilder.DropTable(
-                name: "user");
+                name: "users");
         }
     }
 }
