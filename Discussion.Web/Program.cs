@@ -1,11 +1,20 @@
 namespace Discussion.Web;
 
+using Extensions;
+
 public class Program
 {
     public static async Task Main(string[] args)
     {
         var builder = CreateApplicationBuilder(args);
         
+        builder.Services
+            .RegisterConfigurations(builder.Configuration)
+            .RegisterInfrastructureServices()
+            .RegisterDatabaseAccess(builder.Configuration)
+            .RegisterCustomServices()
+            .RegisterRabbitMq()
+            .RegisterSwagger(builder.Configuration);
         
         var app = builder.Build();
         
@@ -13,9 +22,11 @@ public class Program
         app.UseExceptionHandler(_ => { });
         app.UseRouting();
         
+        app.UseConfiguredSwagger();
         
         app.MapControllers();
         
+        await app.ExecuteStartupActions();
         await app.RunAsync();
     }
     
