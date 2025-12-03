@@ -1,4 +1,4 @@
-namespace Discussion.Web.Configurations;
+namespace Discussion.Core.Infrastructure.Configurations;
 
 public class RabbitMqSettings
 {

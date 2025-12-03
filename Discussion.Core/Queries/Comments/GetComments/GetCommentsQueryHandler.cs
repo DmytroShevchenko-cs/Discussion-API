@@ -4,7 +4,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Database;
-using Infrastructure.Result;
+using Infrastructure.Common.Result;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

@@ -1,4 +1,4 @@
-namespace Discussion.Core.Infrastructure.Result;
+namespace Discussion.Core.Infrastructure.Common.Result;
 
 public class Result<T>
 {

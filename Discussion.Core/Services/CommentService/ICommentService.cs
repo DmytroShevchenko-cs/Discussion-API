@@ -2,7 +2,7 @@ namespace Discussion.Core.Services.CommentService;
 
 using DTO.Comment.AddComment;
 using DTO.Comment.GetComments;
-using Infrastructure.Result;
+using Infrastructure.Common.Result;
 
 public interface ICommentService
 {

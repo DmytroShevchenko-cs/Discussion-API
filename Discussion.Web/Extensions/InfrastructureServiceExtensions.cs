@@ -1,6 +1,7 @@
 namespace Discussion.Web.Extensions;
 
 using Core.Database;
+using Core.Infrastructure.Constants.Swagger;
 using FluentValidation;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
@@ -15,6 +16,16 @@ public static class InfrastructureServiceExtensions
         services.AddMemoryCache();
         services.AddHttpClient();
 
+        services.AddCors(options =>
+        {
+            options.AddPolicy(SwaggerConsts.CorsPolicy, policy =>
+            {
+                policy.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
+        });
+        
         services.AddControllers()
             .AddJsonOptions(options =>
             {

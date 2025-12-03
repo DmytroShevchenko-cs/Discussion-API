@@ -1,4 +1,4 @@
-﻿namespace Discussion.Core.Infrastructure.CQRS;
+﻿namespace Discussion.Core.Infrastructure.Common.CQRS;
 
 using MediatR;
 

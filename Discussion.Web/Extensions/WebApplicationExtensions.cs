@@ -18,16 +18,20 @@ public static class WebApplicationExtensions
     
     public static void UseConfiguredSwagger(this WebApplication app)
     {
+        app.UseRouting();
+        app.UseCors(SwaggerConsts.CorsPolicy);
+        
         app.UseSwagger(c =>
             {
                 c.RouteTemplate = "/openapi/{documentName}.json";
                 c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
                 {
+                    var scheme = httpReq.Scheme;
                     swaggerDoc.Servers = new List<OpenApiServer>
                     {
                         new()
                         {
-                            Url = $"https://{httpReq.Host.Value}",
+                            Url = $"{scheme}://{httpReq.Host.Value}",
                         },
                     };
                 });

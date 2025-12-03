@@ -6,6 +6,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>052a6e99-2e78-4b0b-a31a-c0c0cdcdd99e</UserSecretsId>
         <EnablePreviewFeatures>true</EnablePreviewFeatures>
+        <NoWarn>$(NoWarn);1591</NoWarn>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>

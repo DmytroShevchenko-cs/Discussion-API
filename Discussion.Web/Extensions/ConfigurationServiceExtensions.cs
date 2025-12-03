@@ -1,6 +1,6 @@
 namespace Discussion.Web.Extensions;
 
-using Configurations;
+using Core.Infrastructure.Configurations;
 
 public static class ConfigurationServiceExtensions
 {
@@ -9,6 +9,7 @@ public static class ConfigurationServiceExtensions
         IConfiguration configuration)
     {
         services.Configure<RabbitMqSettings>(configuration.GetSection(nameof(RabbitMqSettings)));
+        services.Configure<AWSR2Settings>(configuration.GetSection(nameof(AWSR2Settings)));
 
         return services;
     }

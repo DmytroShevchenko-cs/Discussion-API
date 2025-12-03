@@ -1,4 +1,4 @@
-namespace Discussion.Core.Infrastructure.Attribute;
+namespace Discussion.Core.Infrastructure.Common.Attribute;
 
 using System;
 using System.ComponentModel.DataAnnotations;

@@ -2,8 +2,8 @@ namespace Discussion.Core.Services.CommentService;
 
 using DTO.Comment.AddComment;
 using DTO.Comment.GetComments;
+using Infrastructure.Common.Result;
 using Infrastructure.Managers.RabbitProducer;
-using Infrastructure.Result;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

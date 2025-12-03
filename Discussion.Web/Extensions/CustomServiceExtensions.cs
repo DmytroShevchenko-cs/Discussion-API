@@ -1,11 +1,13 @@
 namespace Discussion.Web.Extensions;
 
-using Configurations;
+using Amazon.S3;
 using Core.Database;
+using Core.Infrastructure.Configurations;
 using Core.Infrastructure.Constants.Rabbit;
 using Core.Infrastructure.Managers.RabbitConsumer;
 using Core.Infrastructure.Managers.RabbitProducer;
 using Core.Services.CommentService;
+using Core.Services.R2StorageService;
 using MassTransit;
 using Microsoft.Extensions.Options;
 
@@ -19,7 +21,9 @@ public static class CustomServiceExtensions
         });
 
         services.AddTransient<ICommentService, CommentService>();
-        
+        services.AddTransient<IR2StorageService, R2StorageService>();
+        services.AddSingleton<IAmazonS3, AmazonS3Client>();
+
         return services;
     }
 
@@ -53,6 +57,31 @@ public static class CustomServiceExtensions
             });
         });
 
+        return services;
+    }
+
+    public static IServiceCollection RegisterAWSClient(this IServiceCollection services)
+    { 
+        services.AddSingleton<IAmazonS3>(sp =>
+        {
+            var options = sp.GetRequiredService<IOptions<AWSR2Settings>>().Value;
+
+            var endpoint = $"https://{options.AccountId}.r2.cloudflarestorage.com";
+
+            var s3Config = new AmazonS3Config
+            {
+                ServiceURL = endpoint,
+                ForcePathStyle = true, 
+                UseHttp = false,
+            };
+
+            return new AmazonS3Client(
+                options.AccessKey,
+                options.SecretKey,
+                s3Config
+            );
+        });
+        
         return services;
     }
 }

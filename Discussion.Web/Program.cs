@@ -14,6 +14,7 @@ public class Program
             .RegisterDatabaseAccess(builder.Configuration)
             .RegisterCustomServices()
             .RegisterRabbitMq()
+            .RegisterAWSClient()
             .RegisterSwagger(builder.Configuration);
         
         var app = builder.Build();

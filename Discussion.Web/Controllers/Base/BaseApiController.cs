@@ -1,7 +1,7 @@
 namespace Discussion.Web.Controllers.Base;
 
 using System.Net;
-using Core.Infrastructure.Result;
+using Core.Infrastructure.Common.Result;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]

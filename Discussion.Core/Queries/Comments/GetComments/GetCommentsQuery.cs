@@ -1,7 +1,8 @@
 namespace Discussion.Core.Queries.Comments.GetComments;
 
-using Infrastructure.CQRS;using Infrastructure.Models.Common;
-using Infrastructure.Result;
+using Infrastructure.Common.CQRS;
+using Infrastructure.Common.Result;
+using Infrastructure.Models.Common;
 
 public sealed class GetCommentsQuery : PaginationModel, IQuery<Result<GetCommentsResult>>
 {

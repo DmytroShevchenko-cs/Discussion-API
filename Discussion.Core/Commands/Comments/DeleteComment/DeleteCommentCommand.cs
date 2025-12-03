@@ -1,8 +1,8 @@
 namespace Discussion.Core.Commands.Comments.DeleteComment;
 
 using Database;
-using Infrastructure.CQRS;
-using Infrastructure.Result;
+using Infrastructure.Common.CQRS;
+using Infrastructure.Common.Result;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
