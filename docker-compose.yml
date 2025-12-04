@@ -1,0 +1,65 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: discussion_postgres
+    environment:
+      POSTGRES_PASSWORD: "verysecurepass123!"
+      POSTGRES_USER: "postgres"
+      POSTGRES_DB: "discussion-dev"
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: discussion_rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "password123!"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "status" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  api:
+    build:
+      context: .
+      dockerfile: Discussion.Web/Dockerfile
+    container_name: discussion_api
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_URLS: http://0.0.0.0:8080
+
+      # Database
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=${POSTGRES_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+        
+      # R2 Storage
+      R2Settings__AccessKey: ${R2_ACCESS_KEY}
+      R2Settings__SecretKey: ${R2_SECRET_KEY}
+      R2Settings__AccountId: ${R2_ACCOUNT_ID}
+      R2Settings__Bucket: ${R2_BUCKET}
+      
+      # RabbitMQ
+      RabbitMqSettings__HostName: "rabbitmq"
+      RabbitMqSettings__UserName: ${RABBITMQ_USER}
+      RabbitMqSettings__Password: ${RABBITMQ_PASSWORD}
+      RabbitMqSettings__Port: ${RABBITMQ_PORT}  
+
+    restart: unless-stopped
