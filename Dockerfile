@@ -13,5 +13,6 @@ RUN dotnet publish Discussion.Web/Discussion.Web.csproj -c Release -o /app/publi
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 COPY --from=build /app/publish .
-EXPOSE 8080
+
+ENV DOTNET_RUNNING_IN_CONTAINER=true
 ENTRYPOINT ["dotnet", "Discussion.Web.dll"]
