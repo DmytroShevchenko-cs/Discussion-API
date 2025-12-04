@@ -7,6 +7,7 @@ using Core.Infrastructure.Constants.Rabbit;
 using Core.Infrastructure.Managers.RabbitConsumer;
 using Core.Infrastructure.Managers.RabbitProducer;
 using Core.Infrastructure.Processing.RabbitMq.Comment;
+using Core.Services.CaptchaService;
 using Core.Services.CommentService;
 using Core.Services.R2StorageService;
 using MassTransit;
@@ -23,7 +24,9 @@ public static class CustomServiceExtensions
 
         services.AddTransient<ICommentService, CommentService>();
         services.AddTransient<IR2StorageService, R2StorageService>();
+        
         services.AddSingleton<IAmazonS3, AmazonS3Client>();
+        services.AddSingleton<ICaptchaService, CaptchaService>();
         
         services.AddTransient<NewCommentMessageProcessing>();
 

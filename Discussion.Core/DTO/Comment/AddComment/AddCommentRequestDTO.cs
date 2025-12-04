@@ -14,6 +14,6 @@ public class AddCommentRequestDTO
     [FileValidator("jpg,jpeg,png,gif", isOptional: true)]
     public List<IFormFile> Images { get; set; } = [];
     
-    [FileValidator("txt", isOptional: true)]
+    [FileValidator("txt", 100 * 1024, isOptional: true)]
     public List<IFormFile> Attachments { get; set; } = [];
 };

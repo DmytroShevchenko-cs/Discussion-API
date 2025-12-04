@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter)]
 public class FileValidatorAttribute(
     string extensions,
+    int maxSizeBytes = 0,
     bool isOptional = false) : ValidationAttribute
 {
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
@@ -56,6 +57,12 @@ public class FileValidatorAttribute(
         {
             return new ValidationResult($"The extension '{extensionItem}' is not allowed! " +
                                         $"Allowed extensions: '{extensions}'");
+        }
+        
+        if (maxSizeBytes > 0 && fileItem.Length > maxSizeBytes)
+        {
+            return new ValidationResult("Maximum allowed file size is " +
+                                        $"{maxSizeBytes / 1024 / 1024} megabytes");
         }
 
         return ValidationResult.Success;
