@@ -4,6 +4,7 @@ using DTO.Comment.AddComment;
 using DTO.Comment.GetComments;
 using Infrastructure.Common.Result;
 using Infrastructure.Managers.RabbitProducer;
+using Infrastructure.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -17,8 +18,41 @@ public class CommentService(
     {
         try
         {
+            var images = new List<FileMessageItemModel>();
+            foreach (var image in request.Images)
+            {
+                using var ms = new MemoryStream();
+                await image.CopyToAsync(ms);
+                images.Add(new FileMessageItemModel
+                {
+                    FileName = image.FileName,
+                    Content = ms.ToArray()
+                });
+            }
 
-            return Result.Success("Comment added successfully!");
+            var attachments = new List<FileMessageItemModel>();
+            foreach (var file in request.Attachments)
+            {
+                using var ms = new MemoryStream();
+                await file.CopyToAsync(ms);
+                attachments.Add(new FileMessageItemModel
+                {
+                    FileName = file.FileName,
+                    Content = ms.ToArray()
+                });
+            }
+            
+            await rabbitProducer.PublishAsync(new CommentMessageDTO
+            {
+                ParentId = request.ParentId,
+                UserName = request.UserName,
+                Email = request.Email,
+                Text = request.Text,
+                Images = images,
+                Attachments = attachments
+            });
+            
+            return Result.Success("Comment processing started!");
         }
         catch (Exception e)
         {

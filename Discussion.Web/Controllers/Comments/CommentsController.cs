@@ -19,7 +19,9 @@ public sealed class CommentsController(
     [ProducesResponseType(typeof(Result), 200)]
     public async Task<IActionResult> AddNewCommentAsync([FromForm] AddCommentRequestDTO dto)
     {
-        return FromResult(null);
+        var result = await commentService.AddCommentAsync(dto);
+        
+        return FromResult(result);
     }
     
     [HttpDelete]

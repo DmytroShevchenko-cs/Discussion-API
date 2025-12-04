@@ -6,6 +6,7 @@ using Core.Infrastructure.Configurations;
 using Core.Infrastructure.Constants.Rabbit;
 using Core.Infrastructure.Managers.RabbitConsumer;
 using Core.Infrastructure.Managers.RabbitProducer;
+using Core.Infrastructure.Processing.RabbitMq.Comment;
 using Core.Services.CommentService;
 using Core.Services.R2StorageService;
 using MassTransit;
@@ -23,6 +24,8 @@ public static class CustomServiceExtensions
         services.AddTransient<ICommentService, CommentService>();
         services.AddTransient<IR2StorageService, R2StorageService>();
         services.AddSingleton<IAmazonS3, AmazonS3Client>();
+        
+        services.AddTransient<NewCommentMessageProcessing>();
 
         return services;
     }
@@ -31,28 +34,23 @@ public static class CustomServiceExtensions
     {
         services.AddTransient<IRabbitProducer, RabbitProducer>();
 
-        services.AddMassTransit(configurator =>
+        services.AddMassTransit(cfg =>
         {
-            configurator.AddConsumer<CommentConsumer>();
+            cfg.AddConsumer<CommentConsumer>();
 
-            services.AddMassTransit(cfg =>
+            cfg.UsingRabbitMq((context, bus) =>
             {
-                cfg.AddConsumer<CommentConsumer>();
+                var settings = context.GetRequiredService<IOptions<RabbitMqSettings>>().Value;
 
-                cfg.UsingRabbitMq((context, bus) =>
+                bus.Host(settings.HostName, settings.Port, "/", h =>
                 {
-                    var settings = context.GetRequiredService<IOptions<RabbitMqSettings>>().Value;
+                    h.Username(settings.UserName);
+                    h.Password(settings.Password);
+                });
 
-                    bus.Host(settings.HostName, settings.Port, "/", h =>
-                    {
-                        h.Username(settings.UserName);
-                        h.Password(settings.Password);
-                    });
-
-                    bus.ReceiveEndpoint(RabbitConsts.MessageQueue.Comment, e =>
-                    {
-                        e.ConfigureConsumer<CommentConsumer>(context);
-                    });
+                bus.ReceiveEndpoint(RabbitConsts.MessageQueue.Comment, e =>
+                {
+                    e.ConfigureConsumer<CommentConsumer>(context);
                 });
             });
         });

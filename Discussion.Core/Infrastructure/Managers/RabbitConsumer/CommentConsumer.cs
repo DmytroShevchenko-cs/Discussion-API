@@ -3,20 +3,32 @@ namespace Discussion.Core.Infrastructure.Managers.RabbitConsumer;
 using System.Threading.Tasks;
 using MassTransit;
 using Messages;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Processing.RabbitMq.Comment;
 
-public class CommentConsumer : IConsumer<CommentMessage>
+public class CommentConsumer : IConsumer<CommentMessageDTO>
 {
     private readonly ILogger<CommentConsumer> _logger;
-
-    public CommentConsumer(ILogger<CommentConsumer> logger)
+    private readonly IServiceScopeFactory _serviceScopeFactory;
+    public CommentConsumer(ILogger<CommentConsumer> logger, IServiceScopeFactory serviceScopeFactory)
     {
         _logger = logger;
+        _serviceScopeFactory = serviceScopeFactory;
     }
 
-    public Task Consume(ConsumeContext<CommentMessage> context)
+    public async Task Consume(ConsumeContext<CommentMessageDTO> context)
     {
-        _logger.LogInformation("Received comment: {CommentId}", context.Message.CommentId);
-        return Task.CompletedTask;
+        try
+        {
+            using var scope = _serviceScopeFactory.CreateScope();
+            var processor = scope.ServiceProvider.GetRequiredService<NewCommentMessageProcessing>();
+            
+            await processor.Invoke(context.Message);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error processing comment message");
+        }
     }
 }
