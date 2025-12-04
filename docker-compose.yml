@@ -35,7 +35,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: Discussion.Web/Dockerfile
+      dockerfile: ./Dockerfile
     container_name: discussion_api
     depends_on:
       postgres:
