@@ -19,6 +19,14 @@ public static class WebApplicationExtensions
     public static void UseConfiguredSwagger(this WebApplication app)
     {
         app.UseRouting();
+        
+        app.Use(async (context, next) =>
+        {
+            context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+            context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
+            await next.Invoke();
+        });
+        
         app.UseCors(SwaggerConsts.CorsPolicy);
         
         app.UseSwagger(c =>

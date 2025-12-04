@@ -1,9 +1,11 @@
 namespace Discussion.Web.Extensions;
 
 using Core.Database;
+using Core.DTO.Comment.AddComment;
 using Core.Infrastructure.Constants.Swagger;
 using Core.Services.CaptchaService;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
 
@@ -43,6 +45,12 @@ public static class InfrastructureServiceExtensions
         ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Stop;
         
         services.AddSingleton<ICaptchaService, CaptchaService>();
+        
+        services.AddControllers()
+            .AddFluentValidation(fv =>
+            {
+                fv.RegisterValidatorsFromAssemblyContaining<AddCommentRequestDTOValidator>();
+            });
         
         return services;
     }

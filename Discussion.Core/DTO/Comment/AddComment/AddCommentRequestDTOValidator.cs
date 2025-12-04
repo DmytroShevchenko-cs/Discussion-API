@@ -1,6 +1,7 @@
 namespace Discussion.Core.DTO.Comment.AddComment;
 
 using FluentValidation;
+using Infrastructure.Common.Helpers;
 
 public class AddCommentRequestDTOValidator : AbstractValidator<AddCommentRequestDTO>
 {
@@ -20,6 +21,8 @@ public class AddCommentRequestDTOValidator : AbstractValidator<AddCommentRequest
 
         RuleFor(r => r.Text)
             .MaximumLength(2000)
-            .WithMessage("Comment cannot exceed 2000 characters.");
+            .WithMessage("Comment cannot exceed 2000 characters.")
+            .Must(XhtmlValidator.IsValidXhtml)
+            .WithMessage("Comment contains invalid HTML/XHTML");;
     }
 }
