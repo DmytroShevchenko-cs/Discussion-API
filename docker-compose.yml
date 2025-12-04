@@ -48,8 +48,7 @@ services:
       
       ASPNETCORE_URLS: http://0.0.0.0:${PORT:-8080}
       # Database
-      ConnectionStrings__DefaultConnection: "Host=${POSTGRES_HOST};Port=${POSTGRES_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
-        
+      ConnectionStrings__DefaultConnection: "${CONNECTION_STRING}"  
       # R2 Storage
       R2Settings__AccessKey: ${R2_ACCESS_KEY}
       R2Settings__SecretKey: ${R2_SECRET_KEY}
