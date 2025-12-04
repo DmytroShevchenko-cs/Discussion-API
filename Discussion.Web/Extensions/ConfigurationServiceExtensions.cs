@@ -9,7 +9,7 @@ public static class ConfigurationServiceExtensions
         IConfiguration configuration)
     {
         services.Configure<RabbitMqSettings>(configuration.GetSection(nameof(RabbitMqSettings)));
-        services.Configure<AWSR2Settings>(configuration.GetSection(nameof(AWSR2Settings)));
+        services.Configure<R2Settings>(configuration.GetSection(nameof(R2Settings)));
 
         return services;
     }

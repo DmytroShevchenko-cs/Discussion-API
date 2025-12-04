@@ -62,7 +62,7 @@ public static class CustomServiceExtensions
     { 
         services.AddSingleton<IAmazonS3>(sp =>
         {
-            var options = sp.GetRequiredService<IOptions<AWSR2Settings>>().Value;
+            var options = sp.GetRequiredService<IOptions<R2Settings>>().Value;
 
             var endpoint = $"https://{options.AccountId}.r2.cloudflarestorage.com";
 

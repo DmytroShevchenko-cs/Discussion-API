@@ -1,5 +1,6 @@
 namespace Discussion.Core.Services.CommentService;
 
+using Commands.Comments.DeleteComment;
 using DTO.Comment.AddComment;
 using DTO.Comment.GetComments;
 using Infrastructure.Common.Result;
@@ -7,6 +8,7 @@ using Infrastructure.Managers.RabbitProducer;
 using Infrastructure.Messages;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Queries.Comments.GetComments;
 
 public class CommentService(
     IMediator mediator,
@@ -61,31 +63,31 @@ public class CommentService(
         }
     }
 
-    public async Task<Result<GetCommentsResponseDTO>> GetCommentsAsync(GetCommentsRequestDTO request)
+    public async Task<Result<GetCommentsQueryResult>> GetCommentsAsync(GetCommentsRequestDTO request)
     {
         try
         {
-
-            return Result<GetCommentsResponseDTO>.Success(new GetCommentsResponseDTO());
+            var result = await mediator.Send(new GetCommentsQuery()
+            {
+                Offset = request.Offset,
+                PageSize = request.PageSize
+            });
+            return result;
         }
         catch (Exception e)
         {
             logger.LogError(e.Message);
-            return Result<GetCommentsResponseDTO>.Failure($"Error while executing {nameof(GetCommentsAsync)}");
+            return Result<GetCommentsQueryResult>.Failure($"Error while executing {nameof(GetCommentsAsync)}");
         }
     }
 
     public async Task<Result> DeleteCommentAsync(int commentId)
     {
-        try
+        var result = await mediator.Send(new DeleteCommentCommand
         {
-
-            return Result.Success("Comment was deleted!");
-        }
-        catch (Exception e)
-        {
-            logger.LogError(e.Message);
-            return Result.Failure($"Error while executing {nameof(DeleteCommentAsync)}");
-        }
+            CommentId = commentId
+        });
+            
+        return result;
     }
 }

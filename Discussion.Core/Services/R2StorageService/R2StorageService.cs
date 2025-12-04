@@ -7,18 +7,11 @@ using Infrastructure.Common.Helpers;
 using Infrastructure.Configurations;
 using Microsoft.Extensions.Options;
 
-public class R2StorageService : IR2StorageService
+public class R2StorageService(IAmazonS3 s3Client, IOptions<R2Settings> options) : IR2StorageService
 {
     private const int UrlExpireInMinutes = 60;
-    
-    private readonly IAmazonS3 _s3Client;
-    private readonly AWSR2Settings _options;
 
-    public R2StorageService(IAmazonS3 s3Client, IOptions<AWSR2Settings> options)
-    {
-        _s3Client = s3Client;
-        _options = options.Value;
-    }
+    private readonly R2Settings _options = options.Value;
 
     public async Task<StorageItemInternal> UploadFileAsync(
         Stream stream,
@@ -102,7 +95,7 @@ public class R2StorageService : IR2StorageService
             DisablePayloadSigning = true,
         };
 
-        var dataObject = await _s3Client.PutObjectAsync(putObjectRequest, cancellationToken);
+        var dataObject = await s3Client.PutObjectAsync(putObjectRequest, cancellationToken);
         if (dataObject is null)
         {
             throw new Exception($"Error while uploading file {path} in " +
@@ -130,7 +123,7 @@ public class R2StorageService : IR2StorageService
 
         try
         {
-            await _s3Client.GetObjectMetadataAsync(request, cancellationToken);
+            await s3Client.GetObjectMetadataAsync(request, cancellationToken);
             return true;
         }
         catch (AmazonS3Exception e)
@@ -151,6 +144,6 @@ public class R2StorageService : IR2StorageService
             Expires = DateTime.UtcNow.AddMinutes(UrlExpireInMinutes)
         };
 
-        return await _s3Client.GetPreSignedURLAsync(request);
+        return await s3Client.GetPreSignedURLAsync(request);
     }
 }

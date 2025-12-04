@@ -27,12 +27,12 @@ public sealed class CommentsController(
     [HttpDelete]
     [SwaggerOperation("Deltee comment")]
     [Produces("application/json")]
-    [Route("api/comments")]
+    [Route("api/comments/{commentId:int:min(1)}")]
     [ProducesResponseType(typeof(Result), 200)]
-    public async Task<IActionResult> DeleteCommentAsync()
+    public async Task<IActionResult> DeleteCommentAsync([FromRoute] int commentId)
     {
-
-        return FromResult(null);
+        var result = await commentService.DeleteCommentAsync(commentId);
+        return FromResult(result);
     }
     
     [HttpGet]
@@ -40,9 +40,9 @@ public sealed class CommentsController(
     [Produces("application/json")]
     [Route("api/comments")]
     [ProducesResponseType(typeof(Result<GetCommentsResponseDTO>), 200)]
-    public async Task<IActionResult> GetCommentsAsync()
+    public async Task<IActionResult> GetCommentsAsync([FromQuery] GetCommentsRequestDTO request)
     {
-
-        return FromResult(null);
+        var result = await commentService.GetCommentsAsync(request);
+        return FromResult(result);
     }
 }
