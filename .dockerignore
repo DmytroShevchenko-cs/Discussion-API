@@ -1,0 +1,32 @@
+# flyctl launch added from .gitignore
+**/bin
+**/obj
+packages
+**/riderModule.iml
+_ReSharper.Caches
+
+**/obj/BuildHost-netcore
+**/obj/BuildHost-net472
+
+**/.idea
+**/*.sln.iml
+
+**/.env
+
+# flyctl launch added from .idea/.idea.Discussion-API/.idea/.gitignore
+# Default ignored files
+.idea/.idea.Discussion-API/.idea/shelf
+.idea/.idea.Discussion-API/.idea/workspace.xml
+# Rider ignored files
+.idea/.idea.Discussion-API/.idea/projectSettingsUpdater.xml
+.idea/.idea.Discussion-API/.idea/.idea.Discussion.iml
+.idea/.idea.Discussion-API/.idea/modules.xml
+.idea/.idea.Discussion-API/.idea/contentModel.xml
+# Ignored default folder with query files
+.idea/.idea.Discussion-API/.idea/queries
+# Datasource local storage ignored files
+.idea/.idea.Discussion-API/.idea/dataSources
+.idea/.idea.Discussion-API/.idea/dataSources.local.xml
+# Editor-based HTTP Client requests
+.idea/.idea.Discussion-API/.idea/httpRequests
+fly.toml
