@@ -1,5 +1,6 @@
 namespace Discussion.Core.Services.CaptchaService;
 
+using Microsoft.Extensions.Caching.Memory;
 using SixLabors.Fonts;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Drawing.Processing;
@@ -7,21 +8,42 @@ using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Formats.Png;
 
-public class CaptchaService : ICaptchaService
+public class CaptchaService(IMemoryCache cache) : ICaptchaService
 {
-    private readonly Random _random = new ();
+    private readonly Random _random = new();
 
-    public Task<string> GenerateCaptchaCodeAsync(int length = 5)
+    public async Task<(string Key, byte[] Image)> GenerateCaptchaAsync(int length = 5)
     {
-        return Task.FromResult(new string(Enumerable.Range(0, length)
-            .Select(_ => "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"[_random.Next(36)]).ToArray()));
+        var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var code = new string(Enumerable.Range(0, length)
+            .Select(_ => chars[_random.Next(chars.Length)])
+            .ToArray());
+
+        var key = Guid.NewGuid().ToString();
+
+        var imageBytes = await GenerateImageAsync(code);
+
+        cache.Set(key, code, TimeSpan.FromMinutes(5));
+
+        return (key, imageBytes);
     }
 
-    public Task<byte[]> GenerateCaptchaImageAsync(string captchaCode)
+    public bool VerifyCaptcha(string key, string userInput)
+    {
+        if (!cache.TryGetValue(key, out string? realCode))
+        {
+            return false;
+        }
+
+        return realCode == userInput;
+    }
+
+    private Task<byte[]> GenerateImageAsync(string captchaCode)
     {
         return Task.Run(() =>
         {
-            int width = 150, height = 50;
+            var width = 150;
+            var height = 50;
 
             using var image = new Image<Rgba32>(width, height);
             image.Mutate(ctx =>
@@ -29,9 +51,9 @@ public class CaptchaService : ICaptchaService
                 ctx.Fill(Color.White);
 
                 var font = SystemFonts.CreateFont("Arial", 25, FontStyle.Bold);
-                ctx.DrawText(captchaCode ?? "", font, Color.Black, new PointF(10, 10));
-                
-                for (int i = 0; i < 5; i++)
+                ctx.DrawText(captchaCode, font, Color.Black, new PointF(10, 10));
+
+                for (var i = 0; i < 5; i++)
                 {
                     var start = new PointF(_random.Next(width), _random.Next(height));
                     var end = new PointF(_random.Next(width), _random.Next(height));

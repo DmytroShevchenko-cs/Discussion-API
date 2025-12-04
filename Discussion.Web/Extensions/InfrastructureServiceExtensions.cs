@@ -43,14 +43,6 @@ public static class InfrastructureServiceExtensions
         ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Stop;
         
         services.AddSingleton<ICaptchaService, CaptchaService>();
-        services.AddHttpContextAccessor();
-        services.AddDistributedMemoryCache();
-        services.AddSession(options =>
-        {
-            options.IdleTimeout = TimeSpan.FromMinutes(5);
-            options.Cookie.HttpOnly = true;
-            options.Cookie.IsEssential = true;
-        });
         
         return services;
     }

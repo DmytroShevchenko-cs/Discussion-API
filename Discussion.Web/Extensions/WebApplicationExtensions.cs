@@ -19,7 +19,6 @@ public static class WebApplicationExtensions
     public static void UseConfiguredSwagger(this WebApplication app)
     {
         app.UseRouting();
-        app.UseSession();
         app.UseCors(SwaggerConsts.CorsPolicy);
         
         app.UseSwagger(c =>

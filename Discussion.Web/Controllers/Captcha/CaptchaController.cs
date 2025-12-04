@@ -15,11 +15,13 @@ public class CaptchaController(ICaptchaService captchaService) : BaseApiControll
     [ProducesResponseType(typeof(byte[]), 200)]
     public async Task<IActionResult> Generate()
     {
-        var code = await captchaService.GenerateCaptchaCodeAsync();
-        HttpContext.Session.SetString(CaptchaConsts.CaptchaCode, code);
-
-        var imageBytes = await captchaService.GenerateCaptchaImageAsync(code);
-        return File(imageBytes, "image/png");
+        var (key, imageBytes) = await captchaService.GenerateCaptchaAsync();
+        
+        return Ok(new
+        {
+            key,
+            image = $"data:image/png;base64,{Convert.ToBase64String(imageBytes)}"
+        });
     }
     
     [HttpPost]
@@ -27,17 +29,13 @@ public class CaptchaController(ICaptchaService captchaService) : BaseApiControll
     [Produces("application/json")]
     [Route("api/captcha/verify")]
     [ProducesResponseType(typeof(bool), 200)]
-    public IActionResult Verify([FromForm] string userInput)
+    public IActionResult Verify([FromForm] string userInput, [FromForm] string key)
     {
-        var savedCode = HttpContext.Session.GetString(CaptchaConsts.CaptchaCode);
-        
-        if (string.IsNullOrEmpty(userInput) || 
-            savedCode == null || 
-            userInput.ToUpper() != savedCode.ToUpper())
+        if (captchaService.VerifyCaptcha(key, userInput))
         {
-            return Ok(false);
+            return Ok(new { success = true });
         }
 
-        return Ok(true);
+        return Ok(new { success = false });
     }
 }
