@@ -50,7 +50,7 @@ public class CaptchaService(IMemoryCache cache) : ICaptchaService
             {
                 ctx.Fill(Color.White);
 
-                var font = SystemFonts.CreateFont("Arial", 25, FontStyle.Bold);
+                var font = SystemFonts.CreateFont("DejaVu Sans", 25, FontStyle.Bold);
                 ctx.DrawText(captchaCode, font, Color.Black, new PointF(10, 10));
 
                 for (var i = 0; i < 5; i++)
